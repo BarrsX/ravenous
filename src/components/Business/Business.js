@@ -15,6 +15,9 @@ class Business extends React.Component {
                         <p>{this.props.business.city}</p>
                         <p>{this.props.business.state}, {this.props.business.zipCode}</p>
                     </div>
+                    <div>
+                        <a href={`https://maps.google.com?q=${this.props.business.latitude},${this.props.business.longitude}`}>Open Map</a>
+                    </div>
                     <div className="Business-reviews">
                         <h3>{this.props.business.category}</h3>
                         <h3 className="rating">{this.props.business.rating} stars</h3>

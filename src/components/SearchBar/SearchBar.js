@@ -47,7 +47,7 @@ class SearchBar extends React.Component {
     handleSearch(event) {
         this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
         event.preventDefault();
-    }
+    };
 
     renderSortByOptions() {
         return Object.keys(this.sortByOptions).map(sortByOption => {
@@ -79,8 +79,8 @@ class SearchBar extends React.Component {
                     <a onClick={this.handleSearch}>Let's Go</a>
                 </div>
             </div>
-        );
+        )
     }
-}
+};
 
 export default SearchBar;
