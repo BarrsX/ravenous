@@ -1,3 +1,4 @@
+import { Link } from '@mui/material';
 import React from 'react';
 import './SearchBar.css';
 
@@ -76,7 +77,7 @@ class SearchBar extends React.Component {
                     <input onChange={this.handleLocationChange} placeholder="Where?" />
                 </div>
                 <div className="SearchBar-submit">
-                    <a onClick={this.handleSearch}>Let's Go</a>
+                    <Link underline='none' onClick={this.handleSearch}>Let's Go</Link>
                 </div>
             </div>
         )
