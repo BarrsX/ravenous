@@ -11,12 +11,11 @@ class Business extends React.Component {
                 <h2>{this.props.business.name}</h2>
                 <div className="Business-information">
                     <div className="Business-address">
+                        <a href={`https://maps.google.com?q=${this.props.business.latitude},${this.props.business.longitude}`} target='_blank' rel='noopener noreferrer'>
                         <p>{this.props.business.address}</p>
                         <p>{this.props.business.city}</p>
                         <p>{this.props.business.state}, {this.props.business.zipCode}</p>
-                    </div>
-                    <div>
-                        <a href={`https://maps.google.com?q=${this.props.business.latitude},${this.props.business.longitude}`}>Open Map</a>
+                        </a>
                     </div>
                     <div className="Business-reviews">
                         <h3>{this.props.business.category}</h3>
