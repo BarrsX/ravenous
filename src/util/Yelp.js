@@ -1,12 +1,10 @@
-const apiKey = 'sP5eSul4f480F-oNSWCkmvnp2IlDFR-r2j9JJQHGRYFBI9S8im_raIsnlli7eBNxD8PMYoVwue8MQWW48Wlxde5U73ZXceiuKlfaXhjt2sMo7WcC_e-0EX7g-jdVYHYx'
-
 const Yelp = {
   search(term, location, sortBy) {
     return fetch(
       `https://morning-stream-08762.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&sort_by=${sortBy}&limit=48`,
       {
         headers: {
-          Authorization: `Bearer ${apiKey}`
+          Authorization: `Bearer ${process.env.REACT_APP_YELP_API_KEY}`
         }
       }
     )
