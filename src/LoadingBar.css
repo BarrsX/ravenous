@@ -1,0 +1,13 @@
+@keyframes loading {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+.LoadingBar {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    background: #cca353;
+    animation: loading 2s ease-in-out infinite;
+}

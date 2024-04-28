@@ -1,10 +1,14 @@
 .BusinessList {
   display: flex;
+  position: relative;
   justify-content: space-around;
   flex-wrap: wrap;
   margin: 4.4rem 10%;
 }
 
-.BusinessList-empty {
-  /* Add your styles here */
+.LoadingBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
