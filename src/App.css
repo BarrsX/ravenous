@@ -37,7 +37,6 @@ input:focus {
 
 .App {
   font-family: 'Work Sans', sans-serif;
-  background-color: #fff1d6;
   color: #000;
 }
 
@@ -53,7 +52,6 @@ h1 {
 .BusinessList {
   border: 1px solid #cca353;
   padding: 20px;
-  background-color: #fff1d6;
 }
 
 .Business h2 {
