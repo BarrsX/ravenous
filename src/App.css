@@ -9,6 +9,12 @@ html {
   }
 }
 
+input {
+  font-size: 1.2em;
+  padding: 10px;
+  color: #cca353;
+}
+
 input:focus {
   outline: none;
 }
@@ -32,6 +38,7 @@ input:focus {
 .App {
   font-family: 'Work Sans', sans-serif;
   background-color: #fff1d6;
+  color: #000;
 }
 
 h1 {
@@ -41,4 +48,15 @@ h1 {
   font-family: Poppins, sans-serif;
   font-size: 1.8rem;
   color: #fff;
+}
+
+.BusinessList {
+  border: 1px solid #cca353;
+  padding: 20px;
+  background-color: #fff1d6;
+}
+
+.Business h2 {
+  font-size: 2em;
+  color: #cca353;
 }
