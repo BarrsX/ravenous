@@ -75,6 +75,22 @@
   background-color: #a7874b;
 }
 
+.SearchBar-fields button {
+  width: auto;
+  padding: .66rem 1rem;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  font-size: .77rem;
+  font-weight: 500;
+  background-color: #cca353;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.SearchBar-fields button:hover {
+  background-color: #a7874b;
+}
+
 @media only screen and (max-width: 560px) {
   .SearchBar {
     background-image: url('./background_search_mobile.jpg');

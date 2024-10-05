@@ -64,6 +64,41 @@ class SearchBar extends React.Component {
     }
   }
 
+  getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          this.reverseGeocode(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  reverseGeocode = (latitude, longitude) => {
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.results && data.results.length > 0) {
+          const zipCode = data.results[0].address_components.find((component) =>
+            component.types.includes("postal_code")
+          );
+          if (zipCode) {
+            this.setState({ location: zipCode.long_name });
+          }
+        }
+      })
+      .catch((error) => console.error("Error reverse geocoding:", error));
+  };
+
   renderSortByOptions() {
     return Object.keys(this.sortByOptions).map((sortByOption) => {
       let sortByOptionValue = this.sortByOptions[sortByOption];
@@ -90,7 +125,12 @@ class SearchBar extends React.Component {
             onChange={this.handleTermChange}
             placeholder="Search Businesses"
           />
-          <input onChange={this.handleLocationChange} placeholder="Where?" />
+          <input
+            onChange={this.handleLocationChange}
+            placeholder="Where?"
+            value={this.state.location}
+          />
+          <button onClick={this.getUserLocation}>Use My Location</button>
         </div>
         <div className="SearchBar-submit">
           <Link underline="none" onClick={this.handleSearch}>
