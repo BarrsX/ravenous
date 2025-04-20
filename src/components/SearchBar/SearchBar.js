@@ -1,4 +1,3 @@
-import { Link } from "@mui/material";
 import React from "react";
 import "./SearchBar.css";
 
@@ -103,12 +102,14 @@ class SearchBar extends React.Component {
     return Object.keys(this.sortByOptions).map((sortByOption) => {
       let sortByOptionValue = this.sortByOptions[sortByOption];
       return (
-        <li
-          className={this.getSortByClass(sortByOptionValue)}
-          key={sortByOptionValue}
-          onClick={this.handleSortByChange.bind(this, sortByOptionValue)}
-        >
-          {sortByOption}
+        <li key={sortByOptionValue}>
+          <button
+            className={this.getSortByClass(sortByOptionValue)}
+            onClick={this.handleSortByChange.bind(this, sortByOptionValue)}
+            type="button"
+          >
+            {sortByOption}
+          </button>
         </li>
       );
     });
@@ -133,9 +134,13 @@ class SearchBar extends React.Component {
           <button onClick={this.getUserLocation}>Use My Location</button>
         </div>
         <div className="SearchBar-submit">
-          <Link underline="none" onClick={this.handleSearch}>
+          <button
+            type="button"
+            className="SearchBar-button"
+            onClick={this.handleSearch}
+          >
             Let's Go
-          </Link>
+          </button>
         </div>
       </div>
     );

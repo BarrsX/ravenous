@@ -16,8 +16,14 @@
 }
 
 .SearchBar-sort-options li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.SearchBar-sort-options button {
   cursor: pointer;
-  width: 4.33rem;
+  width: auto;
+  border: none;
   border-bottom: 1px solid #fff;
   padding: 0 2.58rem .33rem 2.58rem;
   line-height: 1.13;
@@ -25,14 +31,17 @@
   font-weight: 600;
   font-size: .83rem;
   transition: color .25s;
+  background: none;
+  color: #ffffff;
+  font-family: inherit;
 }
 
-.SearchBar-sort-options li:hover {
+.SearchBar-sort-options button:hover {
   color: #d4cfcf;
 }
 
-.SearchBar-sort-options li.active,
-.SearchBar-sort-options li.active:hover {
+.SearchBar-sort-options button.active,
+.SearchBar-sort-options button.active:hover {
   border-bottom: 1px solid #f0c36c;
   color: #f0c36c;
 }
@@ -88,6 +97,23 @@
 }
 
 .SearchBar-fields button:hover {
+  background-color: #a7874b;
+}
+
+.SearchBar-button {
+  border-radius: 4px;
+  padding: .72rem 1.7rem;
+  background-color: #cca353;
+  color: #ffffff;
+  font-weight: 600;
+  transition: background-color .5s;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.SearchBar-button:hover {
   background-color: #a7874b;
 }
 

@@ -14,18 +14,22 @@ class Business extends React.Component {
 
   componentDidMount() {
     const { address, city, state, zipCode, name } = this.props.business;
-    this.getPlaceID(address, city, state, zipCode, name).then((link) =>
-      this.setState({ link })
+    const mapsUrl = this.constructGoogleMapsSearchUrl(
+      address,
+      city,
+      state,
+      zipCode,
+      name
     );
+    this.setState({ link: mapsUrl });
   }
 
-  getPlaceID(address, city, state, zipCode, name) {
-    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  constructGoogleMapsSearchUrl(address, city, state, zipCode, name) {
     const formattedAddress = `${address}, ${city}, ${state} ${zipCode}`;
     const encodedQuery = encodeURIComponent(`${name} ${formattedAddress}`);
     const url = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
 
-    return Promise.resolve(url);
+    return url;
   }
 
   render() {
