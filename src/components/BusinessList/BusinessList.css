@@ -1,9 +1,26 @@
 .BusinessList {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
   position: relative;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin: 4.4rem 10%;
+  margin: 4.4rem 5%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .BusinessList {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .BusinessList {
+    margin: 1rem 0.5rem;
+  }
 }
 
 .LoadingBar {
@@ -11,4 +28,21 @@
   top: 0;
   left: 0;
   right: 0;
+}
+
+.BusinessList-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.BusinessList-empty p {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
 }

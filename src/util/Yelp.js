@@ -31,10 +31,23 @@ const Yelp = {
                 state: business.location.state,
                 zipCode: business.location.zip_code,
                 category: business.categories[0]?.title || "N/A", // Handle potential missing category
+                categories:
+                  business.categories?.slice(0, 3).map((cat) => cat.title) ||
+                  [], // Get up to 3 categories
                 rating: business.rating,
                 reviewCount: business.review_count,
                 longitude: business.coordinates.longitude,
                 latitude: business.coordinates.latitude,
+                price: business.price || "N/A",
+                phone: business.phone || "",
+                url: business.url || "",
+                distance: business.distance
+                  ? Math.round(business.distance)
+                  : null,
+                isOpenNow:
+                  business.hours && business.hours[0]
+                    ? business.hours[0].is_open_now
+                    : null,
               };
             });
           } else {
