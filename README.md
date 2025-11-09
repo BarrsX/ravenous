@@ -1,5 +1,24 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## 🔐 Environment Setup
+
+**IMPORTANT:** This project requires API keys to function.
+
+1. Copy the environment template:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and add your API keys:
+
+   - `REACT_APP_YELP_API_KEY` - Get from [Yelp Fusion API](https://www.yelp.com/developers)
+   - `REACT_APP_GOOGLE_MAPS_API_KEY` - Get from [Google Cloud Console](https://console.cloud.google.com/)
+
+3. **Never commit your `.env` file!** (It's already in `.gitignore`)
+
+📖 See [SECURITY.md](./SECURITY.md) for API key best practices and security guidelines.
+
 ## Available Scripts
 
 In the project directory, you can run:
