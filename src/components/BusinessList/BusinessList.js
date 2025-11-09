@@ -11,13 +11,24 @@ class BusinessList extends React.Component {
           <div className="LoadingBar"></div>
         ) : !this.props.searchPerformed ? (
           <div className="BusinessList-empty">
-            <p>
-              Please enter a type of food and location to get recommendations.
+            {/* Miller's Law & Cognitive Load - Clear, concise instructions */}
+            <span className="empty-icon" role="img" aria-label="Search">
+              🔍
+            </span>
+            <p className="empty-title">Find Your Next Great Meal</p>
+            <p className="empty-subtitle">
+              Enter a type of food and location to discover local restaurants
             </p>
           </div>
         ) : this.props.businesses.length === 0 ? (
           <div className="BusinessList-empty">
-            <p>No businesses found. Please try another search.</p>
+            <span className="empty-icon" role="img" aria-label="No results">
+              😕
+            </span>
+            <p className="empty-title">No Results Found</p>
+            <p className="empty-subtitle">
+              Try adjusting your search or location
+            </p>
           </div>
         ) : (
           this.props.businesses.map((business) => {

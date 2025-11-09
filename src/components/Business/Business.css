@@ -1,3 +1,4 @@
+/* Serial Position Effect & Aesthetic-Usability - Staggered entrance animation */
 .Business {
   display: flex;
   flex-direction: column;
@@ -11,7 +12,28 @@
   overflow: hidden;
   transition: all 0.3s ease;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: slideIn 0.4s ease-out backwards;
 }
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger the animation for each card */
+.Business:nth-child(1) { animation-delay: 0.05s; }
+.Business:nth-child(2) { animation-delay: 0.1s; }
+.Business:nth-child(3) { animation-delay: 0.15s; }
+.Business:nth-child(4) { animation-delay: 0.2s; }
+.Business:nth-child(5) { animation-delay: 0.25s; }
+.Business:nth-child(6) { animation-delay: 0.3s; }
+.Business:nth-child(n+7) { animation-delay: 0.35s; }
 
 .Business:hover {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -265,24 +287,30 @@
   border: 1px solid rgba(204, 163, 83, 0.2);
 }
 
+/* Fitts's Law - Adequate touch target size for clickable elements */
 /* Yelp Link */
 .Business-yelp-link {
   display: inline-block;
   margin-top: 0.5rem;
   color: #CCA353;
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 500;
   transition: all 0.2s ease;
-  padding: 0.3rem 0.6rem;
+  padding: 0.6rem 1.2rem;
   border: 1px solid rgba(204, 163, 83, 0.3);
   border-radius: 8px;
   background: rgba(204, 163, 83, 0.05);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .Business-yelp-link:hover {
   color: #fff;
   background: #CCA353;
   text-decoration: none;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(204, 163, 83, 0.3);
 }

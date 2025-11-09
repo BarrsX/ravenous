@@ -20,30 +20,42 @@
   margin: 0 5px;
 }
 
+/* Fitts's Law - Larger, more accessible sort buttons */
 .SearchBar-sort-options button {
   cursor: pointer;
   width: auto;
   border: none;
   border-bottom: 1px solid #fff;
-  padding: 0 2.58rem .33rem 2.58rem;
+  padding: 0.5rem 2.58rem 0.5rem 2.58rem;
   line-height: 1.13;
   text-align: center;
   font-weight: 600;
   font-size: .83rem;
-  transition: color .25s;
+  transition: all .25s ease;
   background: none;
   color: #ffffff;
   font-family: inherit;
+  min-height: 44px; /* Adequate touch target */
+  display: flex;
+  align-items: center;
 }
 
 .SearchBar-sort-options button:hover {
   color: #d4cfcf;
+  transform: translateY(-1px);
 }
 
 .SearchBar-sort-options button.active,
 .SearchBar-sort-options button.active:hover {
   border-bottom: 1px solid #f0c36c;
   color: #f0c36c;
+  font-weight: 700;
+}
+
+/* Von Restorff Effect - Visual indicator */
+.active-indicator {
+  margin-left: 0.3rem;
+  font-weight: bold;
 }
 
 .SearchBar-fields {
@@ -52,6 +64,7 @@
   margin-bottom: 2.88rem;
 }
 
+/* Cognitive Load - Clear visual feedback for inputs */
 .SearchBar-fields input {
   width: 21rem;
   padding: .66rem 1rem;
@@ -60,6 +73,14 @@
   border-radius: 4px;
   font-size: .77rem;
   font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.SearchBar-fields input:focus {
+  outline: none;
+  border-color: #f0c36c;
+  box-shadow: 0 0 0 3px rgba(240, 195, 108, 0.3);
+  transform: translateY(-1px);
 }
 
 .SearchBar-fields input:last-child {
@@ -84,6 +105,38 @@
   background-color: #a7874b;
 }
 
+/* Fitts's Law - Larger, easier to click buttons */
+.SearchBar-button {
+  border-radius: 4px;
+  padding: 1rem 3rem;
+  background-color: #cca353;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 48px; /* Minimum touch target size */
+}
+
+.SearchBar-button:hover:not(.disabled) {
+  background-color: #a7874b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.SearchBar-button:active:not(.disabled) {
+  transform: translateY(0);
+}
+
+/* Cognitive Load - Visual feedback for disabled state */
+.SearchBar-button.disabled {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .SearchBar-fields button {
   width: auto;
   padding: .66rem 1rem;
@@ -94,29 +147,16 @@
   background-color: #cca353;
   color: #ffffff;
   cursor: pointer;
+  min-height: 44px; /* Fitts's Law - adequate touch target */
+  transition: all 0.2s ease;
 }
 
 .SearchBar-fields button:hover {
   background-color: #a7874b;
+  transform: translateY(-1px);
 }
 
-.SearchBar-button {
-  border-radius: 4px;
-  padding: .72rem 1.7rem;
-  background-color: #cca353;
-  color: #ffffff;
-  font-weight: 600;
-  transition: background-color .5s;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
-}
-
-.SearchBar-button:hover {
-  background-color: #a7874b;
-}
-
+/* Fitts's Law & Hick's Law - Mobile optimizations */
 @media only screen and (max-width: 560px) {
   .SearchBar {
     background-image: url('./background_search_mobile.jpg');
@@ -125,6 +165,15 @@
   .SearchBar-sort-options ul {
     margin-left: 2rem;
     margin-right: 2rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Larger touch targets on mobile */
+  .SearchBar-sort-options button {
+    min-height: 48px;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
   }
 
   .SearchBar-fields {
@@ -135,5 +184,23 @@
   .SearchBar-fields input {
     margin-right: 0;
     margin-bottom: .86rem;
+    width: 90%;
+    max-width: 400px;
+    min-height: 48px;
+    font-size: 1rem;
+  }
+
+  .SearchBar-fields button {
+    width: 90%;
+    max-width: 400px;
+    min-height: 48px;
+    font-size: 1rem;
+  }
+
+  .SearchBar-button {
+    width: 90%;
+    max-width: 400px;
+    min-height: 52px;
+    font-size: 1.1rem;
   }
 }

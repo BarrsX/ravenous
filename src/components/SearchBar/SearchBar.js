@@ -64,6 +64,13 @@ class SearchBar extends React.Component {
     }
   }
 
+  // Allow Enter key to submit (Jakob's Law - familiar patterns)
+  handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      this.handleSearch(event);
+    }
+  };
+
   getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -108,8 +115,14 @@ class SearchBar extends React.Component {
             className={this.getSortByClass(sortByOptionValue)}
             onClick={this.handleSortByChange.bind(this, sortByOptionValue)}
             type="button"
+            aria-label={`Sort by ${sortByOption}`}
+            aria-pressed={this.state.sortBy === sortByOptionValue}
           >
             {sortByOption}
+            {/* Von Restorff Effect - Visual indicator for active sort */}
+            {this.state.sortBy === sortByOptionValue && (
+              <span className="active-indicator"> ✓</span>
+            )}
           </button>
         </li>
       );
@@ -117,6 +130,9 @@ class SearchBar extends React.Component {
   }
 
   render() {
+    // Check if search is ready (Cognitive Load - clear feedback)
+    const canSearch = this.state.term && this.state.location;
+
     return (
       <div className="SearchBar">
         <div className="SearchBar-sort-options">
@@ -125,20 +141,32 @@ class SearchBar extends React.Component {
         <div className="SearchBar-fields">
           <input
             onChange={this.handleTermChange}
+            onKeyPress={this.handleKeyPress}
             placeholder="Search Businesses"
+            value={this.state.term}
+            aria-label="Search for type of business"
           />
           <input
             onChange={this.handleLocationChange}
+            onKeyPress={this.handleKeyPress}
             placeholder="Where?"
             value={this.state.location}
+            aria-label="Location"
           />
-          <button onClick={this.getUserLocation}>Use My Location</button>
+          <button
+            onClick={this.getUserLocation}
+            aria-label="Use my current location"
+          >
+            Use My Location
+          </button>
         </div>
         <div className="SearchBar-submit">
           <button
             type="button"
-            className="SearchBar-button"
+            className={`SearchBar-button ${!canSearch ? "disabled" : ""}`}
             onClick={this.handleSearch}
+            disabled={!canSearch}
+            aria-label="Search for businesses"
           >
             Let's Go
           </button>
