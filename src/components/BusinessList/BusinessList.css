@@ -21,6 +21,22 @@
   .BusinessList {
     margin: 1rem 0.5rem;
   }
+
+  .BusinessList-empty {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-title {
+    font-size: 1.25rem;
+  }
+
+  .empty-subtitle {
+    font-size: 0.9rem;
+  }
 }
 
 .LoadingBar {

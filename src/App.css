@@ -49,9 +49,23 @@ h1 {
   color: #fff;
 }
 
+@media only screen and (max-width: 560px) {
+  h1 {
+    font-size: 1.5rem;
+    padding: 0.5rem 0;
+  }
+}
+
 .BusinessList {
   border: 1px solid #cca353;
   padding: 20px;
+}
+
+@media only screen and (max-width: 560px) {
+  .BusinessList {
+    padding: 15px 10px;
+    margin: 1rem 0.5rem;
+  }
 }
 
 .Business h2 {
