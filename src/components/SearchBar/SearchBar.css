@@ -5,7 +5,9 @@
   background-image: url('./background_search_desktop.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-  height: 25rem;
+  min-height: 25rem;
+  height: auto;
+  padding: 1rem 0 1.5rem 0;
 }
 
 .SearchBar-sort-options ul {
@@ -62,13 +64,15 @@
   display: flex;
   justify-content: center;
   margin-bottom: 2.88rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 /* Cognitive Load - Clear visual feedback for inputs */
 .SearchBar-fields input {
   width: 21rem;
   padding: .66rem 1rem;
-  margin-right: 2.22rem;
+  margin-right: 0;
   border: 1px solid #fff;
   border-radius: 4px;
   font-size: .77rem;
@@ -81,10 +85,6 @@
   border-color: #f0c36c;
   box-shadow: 0 0 0 3px rgba(240, 195, 108, 0.3);
   transform: translateY(-1px);
-}
-
-.SearchBar-fields input:last-child {
-  margin-right: 0;
 }
 
 .SearchBar-submit {
@@ -156,6 +156,100 @@
   transform: translateY(-1px);
 }
 
+.SearchBar-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin: 0 auto 1rem auto;
+  width: 90%;
+  max-width: 1200px;
+  animation: fadeInFilters 0.2s ease-out;
+}
+
+.SearchBar-filters select,
+.SearchBar-filters label {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.8rem;
+  color: #5a4923;
+  border: 1px solid rgba(204, 163, 83, 0.45);
+}
+
+.SearchBar-filters label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.SearchBar-filters input[type="checkbox"] {
+  margin: 0;
+}
+
+.price-toggles {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(204, 163, 83, 0.45);
+  border-radius: 8px;
+  padding: 0.25rem 0.35rem;
+}
+
+.price-toggle {
+  border: 1px solid rgba(204, 163, 83, 0.5);
+  border-radius: 6px;
+  background: white;
+  color: #6a5327;
+  font-weight: 700;
+  font-size: 0.8rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  cursor: pointer;
+}
+
+.price-toggle.active {
+  background: #cca353;
+  color: white;
+}
+
+.SearchBar-filter-toggle {
+  width: 90%;
+  margin: 0 auto 1rem auto;
+  text-align: center;
+}
+
+.SearchBar-filter-toggle button {
+  border: 1px solid rgba(204, 163, 83, 0.65);
+  background: rgba(255, 255, 255, 0.94);
+  color: #5a4923;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 40px;
+}
+
+.SearchBar-filter-toggle button:hover {
+  background: #cca353;
+  color: #fff;
+}
+
+@keyframes fadeInFilters {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Fitts's Law & Hick's Law - Mobile optimizations */
 @media only screen and (max-width: 560px) {
   .SearchBar {
@@ -189,11 +283,12 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: 1.5rem;
+    gap: 0.75rem;
   }
 
   .SearchBar-fields input {
     margin-right: 0;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0;
     width: 85%;
     max-width: 350px;
     min-height: 48px;
@@ -217,4 +312,20 @@
   .SearchBar-submit {
     margin-top: 0.5rem;
   }
+
+  .SearchBar-filters {
+    width: 92%;
+    justify-content: flex-start;
+    gap: 0.55rem;
+  }
+
+  .SearchBar-filter-toggle {
+    width: 92%;
+  }
+
+  .SearchBar-filters label,
+  .SearchBar-filters select {
+    font-size: 0.85rem;
+  }
+
 }

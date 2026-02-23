@@ -1,6 +1,7 @@
 import React from "react";
 import BusinessList from "./components/BusinessList/BusinessList";
 import SearchBar from "./components/SearchBar/SearchBar";
+import GoogleMaps from "./util/GoogleMaps";
 import Yelp from "./util/Yelp";
 import "./App.css";
 import "./LoadingBar.css";
@@ -17,14 +18,67 @@ class App extends React.Component {
     this.searchYelp = this.searchYelp.bind(this);
   }
 
-  searchYelp(term, location, sortBy) {
+  applyPostFilters(businesses, filters) {
+    return businesses.filter((business) => {
+      if (filters.requireTakeout && !business.supportsTakeout) {
+        return false;
+      }
+
+      if (filters.requireDelivery && !business.supportsDelivery) {
+        return false;
+      }
+
+      if (filters.requireReservation && !business.supportsReservation) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
+  async searchYelp(searchRequest) {
     this.setState({ isLoading: true });
-    Yelp.search(term, location, sortBy).then((businesses) => {
-      this.setState({
-        businesses: businesses,
-        searchPerformed: true,
-        isLoading: false,
-      });
+
+    const {
+      location,
+      sortBy,
+      userCoordinates,
+      filters,
+      term,
+    } = searchRequest;
+
+    let resolvedCoordinates = userCoordinates || null;
+
+    if (!resolvedCoordinates && location) {
+      try {
+        const geocodedLocation = await GoogleMaps.geocodeLocation(location);
+        if (geocodedLocation) {
+          resolvedCoordinates = {
+            latitude: geocodedLocation.latitude,
+            longitude: geocodedLocation.longitude,
+          };
+        }
+      } catch (error) {
+        resolvedCoordinates = null;
+      }
+    }
+
+    let businesses = await Yelp.search({
+      term,
+      location,
+      coordinates: resolvedCoordinates,
+      sortBy,
+      cuisine: filters.cuisine,
+      priceTiers: filters.priceTiers,
+      openNow: filters.openNow,
+    });
+
+    businesses = this.applyPostFilters(businesses, filters);
+
+    this.setState({
+      businesses,
+      searchPerformed: true,
+      isLoading: false,
     });
   }
 

@@ -13,6 +13,16 @@ class Business extends React.Component {
   }
 
   componentDidMount() {
+    this.updateMapLink();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.business.id !== this.props.business.id) {
+      this.updateMapLink();
+    }
+  }
+
+  updateMapLink() {
     const { address, city, state, zipCode, name } = this.props.business;
     const mapsUrl = this.constructGoogleMapsSearchUrl(
       address,
@@ -33,7 +43,7 @@ class Business extends React.Component {
   }
 
   renderStars() {
-    const rating = this.props.business.rating;
+    const rating = this.props.business.rating || 0;
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -70,57 +80,73 @@ class Business extends React.Component {
   }
 
   render() {
+    const { business } = this.props;
+
     return (
       <div className="Business">
         <div className="image-container">
-          <img
-            src={this.props.business.imageSrc}
-            alt={this.props.business.name}
-          />
+          {business.imageSrc ? (
+            <img src={business.imageSrc} alt={business.name} />
+          ) : (
+            <div className="image-fallback">No photo available</div>
+          )}
         </div>
-        <h2>{this.props.business.name}</h2>
-        {this.props.business.distance && (
+        <h2>{business.name}</h2>
+        {business.distance && (
           <div className="Business-distance">
             <span role="img" aria-label="location">
               📍
             </span>
-            {(this.props.business.distance * 0.000621371).toFixed(1)} miles away
+            {(business.distance * 0.000621371).toFixed(1)} miles away
           </div>
         )}
-        {this.props.business.isOpenNow !== null && (
+        {business.isOpenNow !== null && (
           <div
             className={`Business-status ${
-              this.props.business.isOpenNow ? "open" : "closed"
+              business.isOpenNow ? "open" : "closed"
             }`}
           >
-            {this.props.business.isOpenNow ? "🟢 Open Now" : "🔴 Closed"}
+            {business.isOpenNow ? "🟢 Open Now" : "🔴 Closed"}
           </div>
+        )}
+        {business.hoursDisplay && (
+          <div className="Business-hours">{business.hoursDisplay}</div>
         )}
         <div className="Business-information">
           <div className="Business-reviews">
             <div className="Business-categories">
-              {this.props.business.categories &&
-              this.props.business.categories.length > 0 ? (
-                this.props.business.categories.map((category, index) => (
+              {business.categories && business.categories.length > 0 ? (
+                business.categories.map((category, index) => (
                   <span key={index} className="category-tag">
                     {category}
                   </span>
                 ))
               ) : (
-                <h3>{this.props.business.category}</h3>
+                <h3>{business.category}</h3>
               )}
             </div>
-            {this.props.business.price !== "N/A" && (
+            {business.price !== "N/A" && (
               <div className="Business-price">
                 <span className="price-label">Price: </span>
-                <span className="price-value">{this.props.business.price}</span>
+                <span className="price-value">{business.price}</span>
               </div>
             )}
             <div className="Business-rating">
               <div className="stars-container">{this.renderStars()}</div>
-              <span className="rating-text">{this.props.business.rating}</span>
+              <span className="rating-text">{business.rating}</span>
             </div>
-            <p>{this.props.business.reviewCount} reviews</p>
+            <p>{business.reviewCount} reviews</p>
+            <div className="Business-flags">
+              <span className={business.supportsTakeout ? "enabled" : "disabled"}>
+                Takeout
+              </span>
+              <span className={business.supportsDelivery ? "enabled" : "disabled"}>
+                Delivery
+              </span>
+              <span className={business.supportsReservation ? "enabled" : "disabled"}>
+                Reservations
+              </span>
+            </div>
           </div>
 
           <div className="Business-address">
@@ -136,18 +162,18 @@ class Business extends React.Component {
                 </span>
                 <span className="address-label">Address</span>
               </div>
-              <p>{this.props.business.address}</p>
-              <p>{this.props.business.city}</p>
+              <p>{business.address}</p>
+              <p>{business.city}</p>
               <p>
-                {this.props.business.state}, {this.props.business.zipCode}
+                {business.state}, {business.zipCode}
               </p>
             </Link>
           </div>
 
-          {this.props.business.url && (
+          {business.url && (
             <div className="Business-actions">
               <a
-                href={this.props.business.url}
+                href={business.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="Business-yelp-link"
