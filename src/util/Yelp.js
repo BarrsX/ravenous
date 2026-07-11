@@ -4,7 +4,8 @@ const YELP_API_BASE = "https://api.yelp.com/v3";
 const CORS_PROXY = "https://morning-stream-08762.herokuapp.com/";
 const DETAILS_LIMIT = 16;
 
-const buildProxyUrl = (pathWithQuery) => `${CORS_PROXY}${YELP_API_BASE}${pathWithQuery}`;
+const buildProxyUrl = (pathWithQuery) =>
+  `${CORS_PROXY}${YELP_API_BASE}${pathWithQuery}`;
 
 const requestYelp = async (pathWithQuery = "", method = "GET") => {
   const response = await fetch(buildProxyUrl(pathWithQuery), {
@@ -28,7 +29,9 @@ const formatSchedule = (hours) => {
 
   const jsDay = new Date().getDay();
   const yelpDay = (jsDay + 6) % 7;
-  const todaysPeriods = hours[0].open.filter((period) => period.day === yelpDay);
+  const todaysPeriods = hours[0].open.filter(
+    (period) => period.day === yelpDay,
+  );
 
   if (!todaysPeriods.length) {
     return null;
@@ -57,7 +60,8 @@ const mapBusiness = (business) => {
     state: business.location?.state || "",
     zipCode: business.location?.zip_code || "",
     category: business.categories?.[0]?.title || "N/A",
-    categories: business.categories?.slice(0, 3).map((category) => category.title) || [],
+    categories:
+      business.categories?.slice(0, 3).map((category) => category.title) || [],
     rating: business.rating,
     reviewCount: business.review_count,
     longitude: business.coordinates?.longitude,
@@ -66,7 +70,9 @@ const mapBusiness = (business) => {
     phone: business.display_phone || business.phone || "",
     url: business.url || "",
     distance: business.distance ? Math.round(business.distance) : null,
-    isOpenNow: business.hours?.[0]?.is_open_now ?? (business.is_closed === false ? null : false),
+    isOpenNow:
+      business.hours?.[0]?.is_open_now ??
+      (business.is_closed === false ? null : false),
     hoursDisplay: formatSchedule(business.hours),
     supportsDelivery: transactions.includes("delivery"),
     supportsTakeout: transactions.includes("pickup"),
@@ -85,8 +91,10 @@ const enrichBusinessWithDetails = async (business) => {
       ...business,
       isOpenNow: details.hours?.[0]?.is_open_now ?? business.isOpenNow,
       hoursDisplay: formatSchedule(details.hours) || business.hoursDisplay,
-      supportsDelivery: business.supportsDelivery || transactions.includes("delivery"),
-      supportsTakeout: business.supportsTakeout || transactions.includes("pickup"),
+      supportsDelivery:
+        business.supportsDelivery || transactions.includes("delivery"),
+      supportsTakeout:
+        business.supportsTakeout || transactions.includes("pickup"),
       supportsReservation:
         business.supportsReservation ||
         transactions.includes("restaurant_reservation") ||
@@ -140,7 +148,9 @@ const Yelp = {
         query.set("radius", `${radiusMeters}`);
       }
 
-      const jsonResponse = await requestYelp(`/businesses/search?${query.toString()}`);
+      const jsonResponse = await requestYelp(
+        `/businesses/search?${query.toString()}`,
+      );
 
       if (!jsonResponse.businesses) {
         return [];
@@ -152,10 +162,7 @@ const Yelp = {
         .map((business) => enrichBusinessWithDetails(business));
       const enrichedBusinesses = await Promise.all(detailPromises);
 
-      return [
-        ...enrichedBusinesses,
-        ...mappedBusinesses.slice(DETAILS_LIMIT),
-      ];
+      return [...enrichedBusinesses, ...mappedBusinesses.slice(DETAILS_LIMIT)];
     } catch (error) {
       console.error("Error fetching or processing Yelp data:", error);
       return [];

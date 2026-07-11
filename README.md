@@ -13,7 +13,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 2. Edit `.env` and add your API keys:
 
    - `REACT_APP_YELP_API_KEY` - Get from [Yelp Fusion API](https://www.yelp.com/developers)
-   - `REACT_APP_GOOGLE_MAPS_API_KEY` - Get from [Google Cloud Console](https://console.cloud.google.com/)
+
+This project now uses OpenStreetMap Nominatim for geocoding and reverse geocoding, so no Google Maps key is required for search location resolution.
 
 3. **Never commit your `.env` file!** (It's already in `.gitignore`)
 

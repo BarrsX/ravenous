@@ -1,19 +1,11 @@
-const GOOGLE_MAPS_API_BASE = "https://maps.googleapis.com/maps/api";
+const NOMINATIM_API_BASE = "https://nominatim.openstreetmap.org";
 
-const ensureApiKey = () => {
-  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-  if (!apiKey) {
-    throw new Error("Missing REACT_APP_GOOGLE_MAPS_API_KEY");
-  }
-  return apiKey;
-};
-
-const fetchGoogleJson = async (url) => {
+const fetchJson = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
 
-  if (!response.ok || data.status === "REQUEST_DENIED") {
-    throw new Error(data.error_message || `Google API request failed: ${response.status}`);
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
   }
 
   return data;
@@ -37,40 +29,51 @@ const GoogleMaps = {
       return null;
     }
 
-    const apiKey = ensureApiKey();
     const encodedLocation = encodeURIComponent(location);
-    const url = `${GOOGLE_MAPS_API_BASE}/geocode/json?address=${encodedLocation}&key=${apiKey}`;
-    const data = await fetchGoogleJson(url);
+    const url = `${NOMINATIM_API_BASE}/search?format=jsonv2&limit=1&q=${encodedLocation}`;
+    const data = await fetchJson(url);
 
-    if (!data.results || !data.results.length) {
+    if (!Array.isArray(data) || !data.length) {
       return null;
     }
 
-    const result = data.results[0];
+    const result = data[0];
+    const latitude = Number.parseFloat(result.lat);
+    const longitude = Number.parseFloat(result.lon);
+
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      return null;
+    }
+
     return {
-      latitude: result.geometry.location.lat,
-      longitude: result.geometry.location.lng,
-      formattedAddress: result.formatted_address,
+      latitude,
+      longitude,
+      formattedAddress: result.display_name || location,
     };
   },
 
   async reverseGeocode(latitude, longitude) {
-    const apiKey = ensureApiKey();
-    const url = `${GOOGLE_MAPS_API_BASE}/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
-    const data = await fetchGoogleJson(url);
+    const url =
+      `${NOMINATIM_API_BASE}/reverse?format=jsonv2&addressdetails=1` +
+      `&lat=${latitude}&lon=${longitude}`;
+    const data = await fetchJson(url);
 
-    if (!data.results || !data.results.length) {
+    if (!data || !data.address) {
       return null;
     }
 
-    const firstResult = data.results[0];
-    const zipCode = firstResult.address_components.find((component) =>
-      component.types.includes("postal_code")
-    );
+    const address = data.address;
+    const label =
+      address.postcode ||
+      address.city ||
+      address.town ||
+      address.village ||
+      data.display_name ||
+      "";
 
     return {
-      label: zipCode ? zipCode.long_name : firstResult.formatted_address,
-      formattedAddress: firstResult.formatted_address,
+      label,
+      formattedAddress: data.display_name || label,
     };
   },
 
@@ -79,84 +82,28 @@ const GoogleMaps = {
       return {};
     }
 
-    const apiKey = ensureApiKey();
     const uniqueDestinations = destinations.filter(
       (destination) =>
         destination &&
         typeof destination.latitude === "number" &&
         typeof destination.longitude === "number" &&
-        destination.id
+        destination.id,
     );
 
     if (!uniqueDestinations.length) {
       return {};
     }
 
-    const batched = [];
-    const chunkSize = 25;
-
-    for (let index = 0; index < uniqueDestinations.length; index += chunkSize) {
-      batched.push(uniqueDestinations.slice(index, index + chunkSize));
-    }
-
-    const travelTimes = {};
-
-    for (const destinationBatch of batched) {
-      const destinationString = destinationBatch
-        .map((destination) => `${destination.latitude},${destination.longitude}`)
-        .join("|");
-
-      const url =
-        `${GOOGLE_MAPS_API_BASE}/distancematrix/json` +
-        `?origins=${origin.latitude},${origin.longitude}` +
-        `&destinations=${destinationString}` +
-        `&mode=driving&units=imperial&key=${apiKey}`;
-
-      const data = await fetchGoogleJson(url);
-      const rows = data.rows || [];
-
-      if (!rows.length || !rows[0].elements) {
-        continue;
-      }
-
-      rows[0].elements.forEach((element, rowIndex) => {
-        const destination = destinationBatch[rowIndex];
-        if (!destination || element.status !== "OK") {
-          return;
-        }
-
-        travelTimes[destination.id] = {
-          durationText: element.duration?.text || null,
-          durationSeconds: element.duration?.value || null,
-          distanceText: element.distance?.text || null,
-        };
-      });
-    }
-
-    return travelTimes;
+    // Distance Matrix is not available in the free Nominatim endpoint.
+    return {};
   },
 
   loadMapsScript() {
-    if (window.google && window.google.maps) {
-      return Promise.resolve(window.google.maps);
-    }
-
-    if (window.__googleMapsScriptPromise) {
-      return window.__googleMapsScriptPromise;
-    }
-
-    const apiKey = ensureApiKey();
-    window.__googleMapsScriptPromise = new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => resolve(window.google.maps);
-      script.onerror = () => reject(new Error("Failed to load Google Maps script"));
-      document.head.appendChild(script);
-    });
-
-    return window.__googleMapsScriptPromise;
+    return Promise.reject(
+      new Error(
+        "Google Maps script loading has been removed. Use an OpenStreetMap-based map component instead.",
+      ),
+    );
   },
 
   formatHoursRange(start, end) {
