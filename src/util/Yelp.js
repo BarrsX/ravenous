@@ -125,7 +125,11 @@ const Yelp = {
       query.set("limit", "48");
       query.set("sort_by", sortBy || "best_match");
 
-      if (coordinates && coordinates.latitude && coordinates.longitude) {
+      if (
+        coordinates &&
+        Number.isFinite(coordinates.latitude) &&
+        Number.isFinite(coordinates.longitude)
+      ) {
         query.set("latitude", coordinates.latitude);
         query.set("longitude", coordinates.longitude);
       } else {

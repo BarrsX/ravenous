@@ -1,5 +1,4 @@
 import React from "react";
-import GoogleMaps from "../../util/GoogleMaps";
 import "./SearchBar.css";
 
 class SearchBar extends React.Component {
@@ -17,6 +16,8 @@ class SearchBar extends React.Component {
       requireDelivery: false,
       requireReservation: false,
       userCoordinates: null,
+      isLocating: false,
+      locationError: "",
     };
 
     this.handleTermChange = this.handleTermChange.bind(this);
@@ -73,6 +74,7 @@ class SearchBar extends React.Component {
     this.setState({
       location: event.target.value,
       userCoordinates: null,
+      locationError: "",
     });
   }
 
@@ -138,33 +140,42 @@ class SearchBar extends React.Component {
 
   getUserLocation = () => {
     if (!navigator.geolocation) {
+      this.setState({
+        locationError: "Location is not supported by this browser.",
+      });
       return;
     }
 
+    this.setState({ isLocating: true, locationError: "" });
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
+      (position) => {
         const userCoordinates = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         };
 
-        try {
-          const reverseGeocoded = await GoogleMaps.reverseGeocode(
-            userCoordinates.latitude,
-            userCoordinates.longitude
-          );
-
-          this.setState({
-            userCoordinates,
-            location: reverseGeocoded?.label || "",
-          });
-        } catch (error) {
-          this.setState({ userCoordinates });
-        }
+        this.setState({
+          userCoordinates,
+          location: "Current location",
+          isLocating: false,
+          locationError: "",
+        });
       },
       (error) => {
-        console.error("Error getting user location:", error);
-      }
+        const errorMessages = {
+          1: "Location permission was denied. Allow location access in your browser settings and try again.",
+          2: "Your location is unavailable. Check your device's location settings and try again.",
+          3: "Getting your location timed out. Please try again.",
+        };
+
+        this.setState({
+          isLocating: false,
+          locationError:
+            errorMessages[error.code] ||
+            "Unable to get your location. Please try again.",
+        });
+      },
+      { enableHighAccuracy: false, maximumAge: 60000, timeout: 10000 },
     );
   };
 
@@ -236,10 +247,16 @@ class SearchBar extends React.Component {
             onClick={this.getUserLocation}
             aria-label="Use my current location"
             type="button"
+            disabled={this.state.isLocating}
           >
-            Use My Location
+            {this.state.isLocating ? "Getting Location..." : "Use My Location"}
           </button>
         </div>
+        {this.state.locationError && (
+          <p className="SearchBar-location-status" role="alert">
+            {this.state.locationError}
+          </p>
+        )}
         <div className="SearchBar-filter-toggle">
           <button
             type="button"

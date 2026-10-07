@@ -156,6 +156,19 @@
   transform: translateY(-1px);
 }
 
+.SearchBar-fields button:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+
+.SearchBar-location-status {
+  width: 90%;
+  margin: -2rem auto 1.5rem;
+  color: #fff;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
 .SearchBar-filters {
   display: flex;
   justify-content: center;
